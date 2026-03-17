@@ -1,29 +1,28 @@
 use std::collections::HashMap;
+use std::fs;
 use crate::{processing::{Processor, User}, transaction::Transaction};
 
 mod transaction;
 mod processing;
+
 fn main() {
     let mut processor = Processor {
         users: HashMap::new()
     };
 
-    processor.users.insert(1, User {
-        f_name: String::from("Jack"),
-        l_name: String::from("Case"),
-        home_lat: 38.79989156147256,
-        home_long: -90.4827405141186
-    });
+    let contents = fs::read_to_string("data/users.json").expect("Should have read file");
+    let users: Vec<User> = serde_json::from_str(&contents).unwrap();
 
-    let transaction = Transaction {
-        transaction_id: 1,
-        user_id: 2,
-        amount_cents: 500,
-        merchant_lat: 38.78371799775802,
-        merchant_long: -90.5008508851079
-    };
+    for user in users {
+        processor.users.insert(1, user);
+    }
+
+    let contents = fs::read_to_string("data/transactions.json").expect("Should have read file");
+    let transactions: Vec<Transaction> = serde_json::from_str(&contents).unwrap();
     
-    let approved = processor.process_transaction(transaction);
+    let approved = processor.process_transaction(&transactions[0]);
 
     println!("Approved: {0}", approved);
+
+    
 }
