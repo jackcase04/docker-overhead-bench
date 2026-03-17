@@ -2,18 +2,21 @@
     {
         "f_name": "Jack",
         "l_name": "Case",
+        "max_trans_cents": 100000,
         "home_lat": 51.5007,
         "home_long": 0.1246
     },
     {
         "f_name": "Noah",
         "l_name": "Case",
+        "max_trans_cents": 200000,
         "home_lat": 79989156147256,
         "home_long": 4827405141186
     },
     {
         "f_name": "Elijah",
         "l_name": "Case",
+        "max_trans_cents": 50000,
         "home_lat": 79989156147256,
         "home_long": 4827405141186
     }

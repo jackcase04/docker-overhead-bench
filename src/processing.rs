@@ -11,6 +11,7 @@ pub struct Processor {
 pub struct User {
     pub f_name: String,
     pub l_name: String,
+    pub max_trans_cents: u32,
     pub home_lat: f64,
     pub home_long: f64
 }
@@ -20,7 +21,7 @@ impl Processor {
         let user: Option<&User> = self.users.get(&transaction.user_id); 
 
         println!("user: {0}", user.unwrap().f_name);
-        
+
         match user {
             Some(_user) => {
                 let distance = haversine(user.unwrap().home_lat, user.unwrap().home_long, transaction.merchant_lat, transaction.merchant_long);
