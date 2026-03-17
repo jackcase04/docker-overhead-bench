@@ -13,7 +13,7 @@ fn main() {
     let contents = fs::read_to_string("data/users.json").expect("Should have read file");
     let users: Vec<User> = serde_json::from_str(&contents).unwrap();
 
-    let mut i = 0;
+    let mut i = 1;
     for user in users {
         processor.users.insert(i, user);
         i = i + 1;

@@ -18,9 +18,17 @@ pub struct User {
 impl Processor {
     pub fn process_transaction(&self, transaction: &Transaction) -> bool {
         let user: Option<&User> = self.users.get(&transaction.user_id); 
+
+        println!("user: {0}", user.unwrap().f_name);
         
         match user {
-            Some(_user) => true,
+            Some(_user) => {
+                let distance = haversine(user.unwrap().home_lat, user.unwrap().home_long, transaction.merchant_lat, transaction.merchant_long);
+
+                println!("Distance between transaction and user: {0}", distance);
+
+                true
+            },
             None => false
         }
     }
@@ -29,6 +37,8 @@ impl Processor {
 fn haversine(lat1: f64, long1: f64, lat2: f64, long2: f64) -> f64{
     // Using haversine formula:
     // https://www.geeksforgeeks.org/dsa/haversine-formula-to-find-distance-between-two-points-on-a-sphere/
+
+    println!("Lat1: {0} Lon1: {1} Lat2: {2} Lon2: {3}", lat1, long1, lat2, long2);
 
     let d_lat: f64 = (lat2 - lat1) * PI as f64 / 180.0;
     let d_lon: f64 = (long2 - long1) * PI as f64 / 180.0;

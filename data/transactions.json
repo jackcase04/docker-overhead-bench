@@ -1,9 +1,9 @@
 [
     {
         "transaction_id": 1,
-        "user_id": 2,
+        "user_id": 1,
         "amount_cents": 500,
-        "merchant_lat": 78371799775802,
-        "merchant_long": 5008508851079
+        "merchant_lat": 40.6892, 
+        "merchant_long": 74.0445
     }
 ]
