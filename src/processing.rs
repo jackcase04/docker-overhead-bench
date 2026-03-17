@@ -30,8 +30,8 @@ fn haversine(lat1: f64, long1: f64, lat2: f64, long2: f64) -> f64{
     // Using haversine formula:
     // https://www.geeksforgeeks.org/dsa/haversine-formula-to-find-distance-between-two-points-on-a-sphere/
 
-    let d_lat: f64 = ((lat2 - lat1) * PI as f64 / 180.0);
-    let d_lon: f64 = ((long2 - long1) * PI as f64 / 180.0);
+    let d_lat: f64 = (lat2 - lat1) * PI as f64 / 180.0;
+    let d_lon: f64 = (long2 - long1) * PI as f64 / 180.0;
 
     let temp_lat1 = lat1 * PI as f64 / 180.0;
     let temp_lat2 = lat2 * PI as f64 / 180.0;
