@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 use std::fs;
-use crate::processing::Processor;
-use crate::structs::User;
-use crate::structs::Transaction;
+use crate::{processing::{Processor}, {structs::{Transaction, User}}};
 
 mod structs;
 mod processing;
