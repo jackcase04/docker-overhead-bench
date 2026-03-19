@@ -1,5 +1,4 @@
 use std::{collections::HashMap, f32::consts::PI};
-use serde::{Deserialize};
 
 use crate::structs::Transaction;
 use crate::structs::User;
@@ -12,17 +11,22 @@ impl Processor {
     pub fn process_transaction(&self, transaction: &Transaction) -> bool {
         let user: Option<&User> = self.users.get(&transaction.user_id); 
 
-        println!("user: {0}", user.unwrap().f_name);
+        if let Some(user) = user {
+            println!("user: {0}", user.f_name);
 
-        match user {
-            Some(_user) => {
-                let distance = haversine(user.unwrap().home_lat, user.unwrap().home_long, transaction.merchant_lat, transaction.merchant_long);
+            let distance = haversine(user.home_lat, user.home_long, transaction.merchant_lat, transaction.merchant_long);
+            println!("Distance between transaction and user: {0}", distance);
 
-                println!("Distance between transaction and user: {0}", distance);
+            let cents = transaction.amount_cents;
+            println!("Transaction cents amount: {0}", cents);
 
+            if cents < user.max_trans_cents as u64 && distance < 50000.0 {
                 true
-            },
-            None => false
+            } else {
+                false
+            }
+        } else {
+            false
         }
     }
 }
