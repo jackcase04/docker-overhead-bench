@@ -1,8 +1,10 @@
 use std::collections::HashMap;
 use std::fs;
-use crate::{processing::{Processor, User}, transaction::Transaction};
+use crate::processing::Processor;
+use crate::structs::User;
+use crate::structs::Transaction;
 
-mod transaction;
+mod structs;
 mod processing;
 
 fn main() {

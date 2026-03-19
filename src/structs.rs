@@ -8,3 +8,12 @@ pub struct Transaction {
     pub merchant_lat: f64,
     pub merchant_long: f64
 }
+
+#[derive(Deserialize, Debug)]
+pub struct User {
+    pub f_name: String,
+    pub l_name: String,
+    pub max_trans_cents: u32,
+    pub home_lat: f64,
+    pub home_long: f64
+}
