@@ -1,19 +1,11 @@
 use std::{collections::HashMap, f32::consts::PI};
 use serde::{Deserialize};
 
-use crate::transaction::Transaction;
+use crate::structs::Transaction;
+use crate::structs::User;
 
 pub struct Processor {
     pub users: HashMap<u32, User>
-}
-
-#[derive(Deserialize, Debug)]
-pub struct User {
-    pub f_name: String,
-    pub l_name: String,
-    pub max_trans_cents: u32,
-    pub home_lat: f64,
-    pub home_long: f64
 }
 
 impl Processor {
