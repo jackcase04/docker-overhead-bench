@@ -1,10 +1,8 @@
 use std::collections::HashMap;
 use std::fs;
-use crate::{processing::{Processor}, {structs::{Transaction, User}}};
-
-
-mod structs;
-mod processing;
+use docker_overhead_bench::processing::Processor;
+use docker_overhead_bench::structs::Transaction;
+use docker_overhead_bench::structs::User;
 
 fn main() {
     let mut processor = Processor {
