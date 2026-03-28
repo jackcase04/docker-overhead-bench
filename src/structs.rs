@@ -1,6 +1,6 @@
-use serde::{Deserialize};
+use serde::{Serialize, Deserialize};
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Transaction {
     pub transaction_id: u64,
     pub user_id: u32,

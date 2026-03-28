@@ -34,24 +34,12 @@ fn main() {
 
         println!("Data: {0}", data);
 
-        let transactions: Vec<Transaction> = serde_json::from_str(&data).unwrap();
+        let transaction: Transaction = serde_json::from_str(&data).unwrap();
         
-        let approved = processor.process_transaction(&transactions[0]);
+        let approved = processor.process_transaction(&transaction);
 
         println!("Users: {0}", processor.users.len());
         println!("Approved: {0}", approved);
 
-    }
-
-    // This will be changed to be read over the network from the load generator side
-    // For now for testing, just read it in from disk
-    // let contents = fs::read_to_string("data/transactions.json").expect("Should have read file");
-    // let transactions: Vec<Transaction> = serde_json::from_str(&contents).unwrap();
-    
-    // let approved = processor.process_transaction(&transactions[0]);
-
-    // println!("Users: {0}", processor.users.len());
-    // println!("Approved: {0}", approved);
-
-    
+    }    
 }
