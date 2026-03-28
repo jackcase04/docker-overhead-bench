@@ -1,57 +1,26 @@
-use docker_overhead_bench::processing::Processor;
-use docker_overhead_bench::structs::User;
-use docker_overhead_bench::structs::Transaction;
+use docker_overhead_bench::{
+    utils::{handle_connection, init_processor}
+};
 
 use std::{
-    fs,
-    io::Read,
-    collections::HashMap,
-    net::{TcpListener, TcpStream},
+    net::TcpListener, 
     thread,
-    time::Duration,
     sync::Arc
 };
 
-fn main() {
-    let mut processor = Processor {
-        users: HashMap::new()
-    };
+fn main() { 
 
-    let contents = fs::read_to_string("data/users.json").expect("Should have read file");
-    let users: Vec<User> = serde_json::from_str(&contents).unwrap();
-
-    let mut i = 1;
-    for user in users {
-        processor.users.insert(i, user);
-        i = i + 1;
-    }
-
-    let processor = Arc::new(processor);
-
+    let processor = Arc::new(init_processor());
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     
     for stream in listener.incoming() {
-        let mut stream = stream.unwrap();
+        let stream = stream.unwrap();
         println!("Connection established!");
 
         let proc = Arc::clone(&processor);
 
         thread::spawn(move || {
-            thread::sleep(Duration::from_secs(5));
-
-            let mut data = String::new();
-
-            stream.read_to_string(&mut data);
-
-            println!("Data: {0}", data);
-
-            let transaction: Transaction = serde_json::from_str(&data).unwrap();
-            
-            let approved = proc.process_transaction(&transaction);
-
-            println!("Users: {0}", proc.users.len());
-            println!("Approved: {0}", approved);
-
+            handle_connection(stream, proc);
         }); 
     }    
 }

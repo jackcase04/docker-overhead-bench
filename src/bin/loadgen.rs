@@ -2,7 +2,6 @@ use std::fs;
 use std::io::prelude::*;
 use std::net::TcpStream;
 use docker_overhead_bench::structs::Transaction;
-use serde::{Deserialize, Serialize};
 
 fn main() {
     let contents = fs::read_to_string("data/transactions.json").expect("Should have read file");
@@ -12,7 +11,5 @@ fn main() {
 
     let data: Vec<u8> = serde_json::to_vec(&transactions[0]).unwrap();
     
-    stream.write(&data);
-
-    
+    let _ = stream.write(&data);
 }
