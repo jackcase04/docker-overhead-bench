@@ -58,7 +58,7 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
     let approved = proc.process_transaction(&transaction);
 
     println!("Users: {0}", proc.users.len());
-    println!("Approved: {0}", approved);
+    println!("Result: {:?}", approved);
 }
 
 pub fn send_transaction(conf: Arc<Config>, trans: Transaction) {

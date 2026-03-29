@@ -1,8 +1,8 @@
 use std::{collections::HashMap, f32::consts::PI};
 
+use crate::structs::RiskLevel;
 use crate::structs::Transaction;
 use crate::structs::User;
-use crate::structs::RiskLevel;
 
 const SOFT_DIST: f64 = 500.0;
 const HARD_DIST: f64 = 50000.0;
@@ -29,12 +29,12 @@ impl Processor {
             println!("Transaction cents amount: {0}", cents);
 
             if cents < user.max_trans_cents as u64 && distance < HARD_DIST {
-                RiskLevel::Aprrove 
+                RiskLevel::Approve
             } else {
-                RiskLevel::HardFlag 
+                RiskLevel::HardFlag
             }
         } else {
-            RiskLevel::HardFlag 
+            RiskLevel::HardFlag
         }
     }
 }

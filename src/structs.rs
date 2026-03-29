@@ -1,9 +1,10 @@
 use serde::{Deserialize, Serialize};
 
+#[derive(Debug)]
 pub enum RiskLevel {
-    Aprrove,
+    Approve,
     SoftFlag,
-    HardFlag 
+    HardFlag,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
