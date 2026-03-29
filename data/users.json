@@ -1,23 +1,72 @@
 [
-    {
-        "f_name": "Jack",
-        "l_name": "Case",
-        "max_trans_cents": 100000,
-        "home_lat": 51.5007,
-        "home_long": 0.1246
-    },
-    {
-        "f_name": "Noah",
-        "l_name": "Case",
-        "max_trans_cents": 200000,
-        "home_lat": 79989156147256,
-        "home_long": 4827405141186
-    },
-    {
-        "f_name": "Elijah",
-        "l_name": "Case",
-        "max_trans_cents": 50000,
-        "home_lat": 79989156147256,
-        "home_long": 4827405141186
-    }
-]    
+  {
+    "f_name": "Jack",
+    "l_name": "Case",
+    "max_trans_cents": 100000,
+    "home_lat": 51.5007,
+    "home_long": -0.1246
+  },
+  {
+    "f_name": "Noah",
+    "l_name": "Case",
+    "max_trans_cents": 200000,
+    "home_lat": 38.9072,
+    "home_long": -77.0369
+  },
+  {
+    "f_name": "Elijah",
+    "l_name": "Case",
+    "max_trans_cents": 50000,
+    "home_lat": 41.8781,
+    "home_long": -87.6298
+  },
+  {
+    "f_name": "Mara",
+    "l_name": "Smith",
+    "max_trans_cents": 75000,
+    "home_lat": 37.7749,
+    "home_long": -122.4194
+  },
+  {
+    "f_name": "Diego",
+    "l_name": "Cena",
+    "max_trans_cents": 300000,
+    "home_lat": 19.4326,
+    "home_long": -99.1332
+  },
+  {
+    "f_name": "Rachel",
+    "l_name": "Warner",
+    "max_trans_cents": 150000,
+    "home_lat": 28.6139,
+    "home_long": 77.209
+  },
+  {
+    "f_name": "Lena",
+    "l_name": "Fisher",
+    "max_trans_cents": 80000,
+    "home_lat": 52.52,
+    "home_long": 13.405
+  },
+  {
+    "f_name": "Marcus",
+    "l_name": "Case",
+    "max_trans_cents": 120000,
+    "home_lat": 33.749,
+    "home_long": -84.388
+  },
+  {
+    "f_name": "Simon",
+    "l_name": "Wibblemeyer",
+    "max_trans_cents": 250000,
+    "home_lat": 35.6762,
+    "home_long": 139.6503
+  },
+  {
+    "f_name": "Sofia",
+    "l_name": "Andersen",
+    "max_trans_cents": 60000,
+    "home_lat": 55.6761,
+    "home_long": 12.5683
+  }
+]

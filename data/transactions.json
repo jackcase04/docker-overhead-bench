@@ -1,9 +1,212 @@
 [
-    {
-        "transaction_id": 1,
-        "user_id": 1,
-        "amount_cents": 500,
-        "merchant_lat": 40.6892, 
-        "merchant_long": 74.0445
-    }
+  {
+    "transaction_id": 1,
+    "user_id": 1,
+    "amount_cents": 500,
+    "merchant_lat": 40.6892,
+    "merchant_long": -74.0445
+  },
+  {
+    "transaction_id": 2,
+    "user_id": 1,
+    "amount_cents": 9800,
+    "merchant_lat": 51.5033,
+    "merchant_long": -0.1195
+  },
+  {
+    "transaction_id": 3,
+    "user_id": 1,
+    "amount_cents": 45000,
+    "merchant_lat": 48.8566,
+    "merchant_long": 2.3522
+  },
+  {
+    "transaction_id": 4,
+    "user_id": 2,
+    "amount_cents": 120000,
+    "merchant_lat": 38.8951,
+    "merchant_long": -77.0364
+  },
+  {
+    "transaction_id": 5,
+    "user_id": 2,
+    "amount_cents": 199999,
+    "merchant_lat": 25.7617,
+    "merchant_long": -80.1918
+  },
+  {
+    "transaction_id": 6,
+    "user_id": 2,
+    "amount_cents": 3200,
+    "merchant_lat": 38.9072,
+    "merchant_long": -77.0369
+  },
+  {
+    "transaction_id": 7,
+    "user_id": 3,
+    "amount_cents": 49999,
+    "merchant_lat": 41.8827,
+    "merchant_long": -87.6233
+  },
+  {
+    "transaction_id": 8,
+    "user_id": 3,
+    "amount_cents": 1500,
+    "merchant_lat": 41.85,
+    "merchant_long": -87.65
+  },
+  {
+    "transaction_id": 9,
+    "user_id": 3,
+    "amount_cents": 50001,
+    "merchant_lat": 37.7749,
+    "merchant_long": -122.4194
+  },
+  {
+    "transaction_id": 10,
+    "user_id": 4,
+    "amount_cents": 74999,
+    "merchant_lat": 37.7849,
+    "merchant_long": -122.4094
+  },
+  {
+    "transaction_id": 11,
+    "user_id": 4,
+    "amount_cents": 200,
+    "merchant_lat": 34.0522,
+    "merchant_long": -118.2437
+  },
+  {
+    "transaction_id": 12,
+    "user_id": 4,
+    "amount_cents": 15000,
+    "merchant_lat": 47.6062,
+    "merchant_long": -122.3321
+  },
+  {
+    "transaction_id": 13,
+    "user_id": 5,
+    "amount_cents": 280000,
+    "merchant_lat": 19.4285,
+    "merchant_long": -99.1277
+  },
+  {
+    "transaction_id": 14,
+    "user_id": 5,
+    "amount_cents": 305000,
+    "merchant_lat": 40.7128,
+    "merchant_long": -74.006
+  },
+  {
+    "transaction_id": 15,
+    "user_id": 5,
+    "amount_cents": 8750,
+    "merchant_lat": 20.9674,
+    "merchant_long": -89.6237
+  },
+  {
+    "transaction_id": 16,
+    "user_id": 6,
+    "amount_cents": 149000,
+    "merchant_lat": 28.61,
+    "merchant_long": 77.23
+  },
+  {
+    "transaction_id": 17,
+    "user_id": 6,
+    "amount_cents": 500,
+    "merchant_lat": 19.076,
+    "merchant_long": 72.8777
+  },
+  {
+    "transaction_id": 18,
+    "user_id": 6,
+    "amount_cents": 151000,
+    "merchant_lat": 1.3521,
+    "merchant_long": 103.8198
+  },
+  {
+    "transaction_id": 19,
+    "user_id": 7,
+    "amount_cents": 79999,
+    "merchant_lat": 52.52,
+    "merchant_long": 13.405
+  },
+  {
+    "transaction_id": 20,
+    "user_id": 7,
+    "amount_cents": 35000,
+    "merchant_lat": 48.1351,
+    "merchant_long": 11.582
+  },
+  {
+    "transaction_id": 21,
+    "user_id": 7,
+    "amount_cents": 80500,
+    "merchant_lat": 51.5074,
+    "merchant_long": -0.1278
+  },
+  {
+    "transaction_id": 22,
+    "user_id": 8,
+    "amount_cents": 11900,
+    "merchant_lat": 33.749,
+    "merchant_long": -84.388
+  },
+  {
+    "transaction_id": 23,
+    "user_id": 8,
+    "amount_cents": 119999,
+    "merchant_lat": 29.7604,
+    "merchant_long": -95.3698
+  },
+  {
+    "transaction_id": 24,
+    "user_id": 8,
+    "amount_cents": 125000,
+    "merchant_lat": 36.1627,
+    "merchant_long": -86.7816
+  },
+  {
+    "transaction_id": 25,
+    "user_id": 9,
+    "amount_cents": 249000,
+    "merchant_lat": 35.6762,
+    "merchant_long": 139.6503
+  },
+  {
+    "transaction_id": 26,
+    "user_id": 9,
+    "amount_cents": 1000,
+    "merchant_lat": 34.6937,
+    "merchant_long": 135.5023
+  },
+  {
+    "transaction_id": 27,
+    "user_id": 9,
+    "amount_cents": 251000,
+    "merchant_lat": 22.3193,
+    "merchant_long": 114.1694
+  },
+  {
+    "transaction_id": 28,
+    "user_id": 10,
+    "amount_cents": 59999,
+    "merchant_lat": 55.6761,
+    "merchant_long": 12.5683
+  },
+  {
+    "transaction_id": 29,
+    "user_id": 10,
+    "amount_cents": 200,
+    "merchant_lat": 59.3293,
+    "merchant_long": 18.0686
+  },
+  {
+    "transaction_id": 30,
+    "user_id": 10,
+    "amount_cents": 61000,
+    "merchant_lat": 52.3676,
+    "merchant_long": 4.9041
+  }
 ]

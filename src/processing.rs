@@ -2,13 +2,16 @@ use std::{collections::HashMap, f32::consts::PI};
 
 use crate::structs::Transaction;
 use crate::structs::User;
+use crate::structs::RiskLevel;
 
+const SOFT_DIST: f64 = 500.0;
+const HARD_DIST: f64 = 50000.0;
 pub struct Processor {
     pub users: HashMap<u32, User>,
 }
 
 impl Processor {
-    pub fn process_transaction(&self, transaction: &Transaction) -> bool {
+    pub fn process_transaction(&self, transaction: &Transaction) -> RiskLevel {
         let user: Option<&User> = self.users.get(&transaction.user_id);
 
         if let Some(user) = user {
@@ -25,13 +28,13 @@ impl Processor {
             let cents = transaction.amount_cents;
             println!("Transaction cents amount: {0}", cents);
 
-            if cents < user.max_trans_cents as u64 && distance < 50000.0 {
-                true
+            if cents < user.max_trans_cents as u64 && distance < HARD_DIST {
+                RiskLevel::Aprrove 
             } else {
-                false
+                RiskLevel::HardFlag 
             }
         } else {
-            false
+            RiskLevel::HardFlag 
         }
     }
 }

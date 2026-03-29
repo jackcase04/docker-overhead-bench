@@ -1,5 +1,11 @@
 use serde::{Deserialize, Serialize};
 
+pub enum RiskLevel {
+    Aprrove,
+    SoftFlag,
+    HardFlag 
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Transaction {
     pub transaction_id: u64,
