@@ -1,7 +1,7 @@
-use std::{sync::Arc, thread, thread::JoinHandle};
 use rand::Rng;
+use std::{sync::Arc, thread, thread::JoinHandle};
 
-use docker_overhead_bench::{utils::{init_config, init_transactions, send_transaction}};
+use docker_overhead_bench::utils::{init_config, init_transactions, send_transaction};
 
 fn main() {
     let transactions = Arc::new(init_transactions());

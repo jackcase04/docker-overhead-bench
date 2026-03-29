@@ -5,7 +5,8 @@ use crate::structs::Transaction;
 use crate::structs::User;
 
 const SOFT_DIST: f64 = 500.0;
-const HARD_DIST: f64 = 50000.0;
+const HARD_DIST: f64 = 2000.0;
+
 pub struct Processor {
     pub users: HashMap<u32, User>,
 }
@@ -28,9 +29,20 @@ impl Processor {
             let cents = transaction.amount_cents;
             println!("Transaction cents amount: {0}", cents);
 
-            if cents < user.max_trans_cents as u64 && distance < HARD_DIST {
+            // CASE 1: Transaction is below the users limit, and below the soft flag distance.
+            if cents <= user.max_trans_cents as u64 && distance < SOFT_DIST {
                 RiskLevel::Approve
-            } else {
+            }
+            // CASE 2: Transaction is above the limit, but not 2x+ the limit.
+            // Or, transaction is above soft distance flag but not exceeding the hard distance
+            else if (cents > user.max_trans_cents as u64
+                && cents < (user.max_trans_cents * 2) as u64)
+                || (distance > SOFT_DIST && distance < HARD_DIST)
+            {
+                RiskLevel::SoftFlag
+            }
+            // CASE 3: Transaction exceeds their max by 2x+, or exceeds hard distance
+            else {
                 RiskLevel::HardFlag
             }
         } else {
