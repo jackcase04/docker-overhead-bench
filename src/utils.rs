@@ -1,6 +1,7 @@
 use crate::processing::Processor;
 use crate::structs::User;
 use crate::structs::Transaction;
+use crate::structs::Config;
 
 use std::sync::Arc;
 use std::{
@@ -8,7 +9,10 @@ use std::{
     fs,
     thread,
     time::Duration,
-    io::Read,
+    io::{
+        Read,
+        Write
+    },
     net::TcpStream
 };
 
@@ -46,6 +50,8 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
     println!("Approved: {0}", approved);
 }
 
-pub fn send_transaction() {
-    
+pub fn send_transaction(conf: Arc<Config>, trans: Transaction) {
+    let mut stream = TcpStream::connect(&conf.address).unwrap();
+    let data: Vec<u8> = serde_json::to_vec(&trans).unwrap();
+    let _ = stream.write_all(&data);
 }

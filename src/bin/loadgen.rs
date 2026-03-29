@@ -1,14 +1,16 @@
-use std::thread::JoinHandle;
 use std::{
     fs,
     thread,
+    thread::JoinHandle,
     sync::Arc 
 };
-use std::io::prelude::*;
-use std::net::TcpStream;
-use docker_overhead_bench::structs::{
-    Transaction,
-    Config
+
+use docker_overhead_bench::{
+    structs::{
+        Transaction,
+        Config
+    },
+    utils::send_transaction
 };
 
 fn main() {
@@ -26,14 +28,10 @@ fn main() {
 
         for _j in 0..config.concurrency {
             let conf = Arc::clone(&config);
-            let trans = Arc::clone(&transactions);
+            let trans = transactions[0].clone();
 
             let handle = thread::spawn(move || {
-                let mut stream = TcpStream::connect(&conf.address).unwrap();
-
-                let data: Vec<u8> = serde_json::to_vec(&trans[0]).unwrap();
-                    
-                let _ = stream.write_all(&data);
+                send_transaction(conf, trans); 
             });
 
             handles.push(handle);
