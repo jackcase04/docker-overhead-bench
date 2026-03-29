@@ -1,6 +1,7 @@
 use std::{sync::Arc, thread, thread::JoinHandle};
+use rand::Rng;
 
-use docker_overhead_bench::utils::{init_config, init_transactions, send_transaction};
+use docker_overhead_bench::{utils::{init_config, init_transactions, send_transaction}};
 
 fn main() {
     let transactions = Arc::new(init_transactions());
@@ -10,8 +11,10 @@ fn main() {
         let mut handles: Vec<JoinHandle<()>> = Vec::new();
 
         for _j in 0..config.concurrency {
+            let random = rand::thread_rng().gen_range(0..30) as usize;
+
             let conf = Arc::clone(&config);
-            let trans = transactions[0].clone();
+            let trans = transactions[random].clone();
 
             let handle = thread::spawn(move || {
                 send_transaction(conf, trans);
