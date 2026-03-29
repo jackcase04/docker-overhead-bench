@@ -33,6 +33,20 @@ pub fn init_processor() -> Processor {
     processor
 }
 
+pub fn init_transactions() -> Vec<Transaction> {
+    let contents = fs::read_to_string("data/transactions.json").expect("Should have read file");
+    let transactions: Vec<Transaction> = serde_json::from_str(&contents).unwrap();
+
+    transactions
+}
+
+pub fn init_config() -> Config {
+    let raw = std::fs::read_to_string("config.toml").expect("Should have read file");
+    let config: Config = toml::from_str(&raw).expect("invalid config");
+
+    config
+}
+
 pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
     thread::sleep(Duration::from_secs(5));
 

@@ -1,27 +1,17 @@
 use std::{
-    fs,
     thread,
     thread::JoinHandle,
     sync::Arc 
 };
 
 use docker_overhead_bench::{
-    structs::{
-        Transaction,
-        Config
-    },
-    utils::send_transaction
+    utils::{init_config, init_transactions, send_transaction}
 };
 
 fn main() {
-    let contents = fs::read_to_string("data/transactions.json").expect("Should have read file");
-    let transactions: Vec<Transaction> = serde_json::from_str(&contents).unwrap();
-
-    let raw = std::fs::read_to_string("config.toml").expect("Should have read file");
-    let config: Config = toml::from_str(&raw).expect("invalid config");
-
-    let transactions = Arc::new(transactions);
-    let config= Arc::new(config);  
+    
+    let transactions = Arc::new(init_transactions());
+    let config= Arc::new(init_config());  
 
     for _i in (0..config.iterations).step_by(config.concurrency as usize) {
         let mut handles: Vec<JoinHandle<()>> = Vec::new();
