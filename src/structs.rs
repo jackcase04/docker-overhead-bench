@@ -17,3 +17,10 @@ pub struct User {
     pub home_lat: f64,
     pub home_long: f64
 }
+
+#[derive(Deserialize, Debug)]
+pub struct Config {
+    pub iterations: u32,
+    pub concurrency: u32,
+    pub address: String
+}
