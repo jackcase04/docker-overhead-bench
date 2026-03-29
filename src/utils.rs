@@ -1,24 +1,21 @@
 use crate::processing::Processor;
-use crate::structs::User;
-use crate::structs::Transaction;
 use crate::structs::Config;
+use crate::structs::Transaction;
+use crate::structs::User;
 
 use std::sync::Arc;
 use std::{
     collections::HashMap,
     fs,
+    io::{Read, Write},
+    net::TcpStream,
     thread,
     time::Duration,
-    io::{
-        Read,
-        Write
-    },
-    net::TcpStream
 };
 
 pub fn init_processor() -> Processor {
     let mut processor = Processor {
-        users: HashMap::new()
+        users: HashMap::new(),
     };
 
     let contents = fs::read_to_string("data/users.json").expect("Should have read file");
@@ -57,7 +54,7 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
     println!("Data: {0}", data);
 
     let transaction: Transaction = serde_json::from_str(&data).unwrap();
-    
+
     let approved = proc.process_transaction(&transaction);
 
     println!("Users: {0}", proc.users.len());
