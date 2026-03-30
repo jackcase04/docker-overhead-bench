@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::fmt;
 
 #[derive(Debug)]
 pub enum RiskLevel {
@@ -6,6 +7,13 @@ pub enum RiskLevel {
     SoftFlag,
     HardFlag,
 }
+
+impl fmt::Display for RiskLevel {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Transaction {

@@ -1,5 +1,6 @@
 use crate::processing::Processor;
 use crate::structs::Config;
+use crate::structs::RiskLevel;
 use crate::structs::Transaction;
 use crate::structs::User;
 
@@ -12,6 +13,8 @@ use std::{
     thread,
     time::Duration,
 };
+
+const LAT: u64 = 5;
 
 pub fn init_processor() -> Processor {
     let mut processor = Processor {
@@ -45,7 +48,7 @@ pub fn init_config() -> Config {
 }
 
 pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
-    thread::sleep(Duration::from_secs(5));
+    thread::sleep(Duration::from_millis(LAT));
 
     let mut data = String::new();
 
@@ -55,14 +58,25 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
 
     let transaction: Transaction = serde_json::from_str(&data).unwrap();
 
-    let approved = proc.process_transaction(&transaction);
+    let approved: RiskLevel = proc.process_transaction(&transaction);
 
     println!("Users: {0}", proc.users.len());
     println!("Result: {:?}", approved);
+
+    let data = approved.to_string().into_bytes(); 
+
+    let _ = stream.write_all(&data);
 }
 
 pub fn send_transaction(conf: Arc<Config>, trans: Transaction) {
     let mut stream = TcpStream::connect(&conf.address).unwrap();
     let data: Vec<u8> = serde_json::to_vec(&trans).unwrap();
     let _ = stream.write_all(&data);
+    stream.shutdown(std::net::Shutdown::Write).unwrap();
+
+    let mut data = String::new(); 
+
+    let _ = stream.read_to_string(&mut data);
+
+    println!("Result: {0}", data);
 }
