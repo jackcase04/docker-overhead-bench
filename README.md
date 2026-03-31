@@ -1,4 +1,24 @@
-# docker-overhead-bench
+# Container Overhead Analysis in Soft Real-Time Fraud Detection Systems (CE5170)
+
+### Building
+
+Use the following commands to build and test the server and load generator.
+
+Server: `cargo run --bin server`
+
+Load Generator: `cargo run --bin loadgen`
+
+When replicating the actual expiriment, be sure to provide the `--release` flag to cargo to optimize the build for the data collection.
+
+---
+
+### Analysis
+
+To generate the plot after running a test, run `python3 scripts/plot.py`.
+
+---
+
+### Troubleshooting
 
 You may get issues with the OS limiting the amount of connections at once. If you get this error:
 
