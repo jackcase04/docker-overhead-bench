@@ -40,9 +40,12 @@ pub fn init_transactions() -> Vec<Transaction> {
     transactions
 }
 
-pub fn init_config() -> Config {
-    let raw = std::fs::read_to_string("config.toml").expect("Should have read file");
-    let config: Config = toml::from_str(&raw).expect("invalid config");
+pub fn init_config(iterations: u32, concurrency: u32) -> Config {
+    let config = Config {
+        iterations: iterations,
+        concurrency: concurrency,
+        address: String::from("127.0.0.1:7878")
+    };
 
     config
 }
@@ -54,11 +57,9 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
 
     let _ = stream.read_to_string(&mut data);
 
-
     let transaction: Transaction = serde_json::from_str(&data).unwrap();
 
     let approved: RiskLevel = proc.process_transaction(&transaction);
-
 
     let data = approved.to_string().into_bytes();
 

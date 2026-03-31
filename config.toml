@@ -1,3 +1,0 @@
-iterations = 10000
-concurrency = 200
-address = "127.0.0.1:7878"

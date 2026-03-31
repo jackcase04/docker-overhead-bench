@@ -16,7 +16,6 @@ impl Processor {
         let user: Option<&User> = self.users.get(&transaction.user_id);
 
         if let Some(user) = user {
-
             let distance = haversine(
                 user.home_lat,
                 user.home_long,

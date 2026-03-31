@@ -1,5 +1,6 @@
 use rand::Rng;
 use std::{
+    env,
     fs::File,
     io::{BufWriter, Write},
     sync::Arc,
@@ -10,8 +11,24 @@ use std::{
 use docker_overhead_bench::utils::{init_config, init_transactions, send_transaction};
 
 fn main() {
+    let iterations: u32 = env::args()
+        .nth(1)
+        .expect("Expected iterations argument")
+        .trim()
+        .parse()
+        .expect("Iterations must be a u32");
+
+    let concurrency: u32 = env::args()
+        .nth(2)
+        .expect("Expected concurrency argument")
+        .trim()
+        .parse()
+        .expect("Concurrency must be a u32");
+
+    println!("Args: {0} {1}", iterations, concurrency);
+
     let transactions = Arc::new(init_transactions());
-    let config = Arc::new(init_config());
+    let config = Arc::new(init_config(iterations, concurrency));
     let mut results: Vec<(Instant, Duration)> = Vec::new();
     let start = Instant::now();
 
@@ -26,7 +43,7 @@ fn main() {
 
             let handle = thread::spawn(move || {
                 let data: Vec<u8> = serde_json::to_vec(&trans).unwrap();
-                
+
                 let start = Instant::now();
                 send_transaction(conf, data);
                 (start, start.elapsed())
