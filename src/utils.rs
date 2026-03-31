@@ -7,7 +7,7 @@ use crate::structs::User;
 use std::sync::Arc;
 use std::{
     collections::HashMap,
-    fs,
+    env, fs,
     io::{Read, Write},
     net::TcpStream,
     thread,
@@ -15,6 +15,38 @@ use std::{
 };
 
 const LAT: u64 = 5;
+
+pub fn parse_args() -> (u32, u32, Option<u32>, Option<String>) {
+    let iterations: u32 = env::args()
+        .nth(1)
+        .expect("Expected iterations argument")
+        .trim()
+        .parse()
+        .expect("Iterations must be a u32");
+
+    let concurrency: u32 = env::args()
+        .nth(2)
+        .expect("Expected concurrency argument")
+        .trim()
+        .parse()
+        .expect("Concurrency must be a u32");
+
+    let trial: Option<u32>;
+
+    match env::args().nth(3) {
+        Some(val) => trial = Some(val.trim().parse().expect("Trial must be u32")),
+        None => trial = None,
+    }
+
+    let environment: Option<String>;
+
+    match env::args().nth(4) {
+        Some(val) => environment = Some(val),
+        None => environment = None,
+    }
+
+    (iterations, concurrency, trial, environment)
+}
 
 pub fn init_processor() -> Processor {
     let mut processor = Processor {

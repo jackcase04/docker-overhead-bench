@@ -6,6 +6,6 @@ do
   for TRIAL in 1 2 3 4 5
   do
     echo "Running trial $TRIAL for concurrency $CONCURRENCY:"
-    ./target/release/loadgen 10000 $CONCURRENCY
+    ./target/release/loadgen 10000 $CONCURRENCY $TRIAL "bare metal"
   done
 done

@@ -1,29 +1,17 @@
 use rand::Rng;
 use std::{
-    env,
     fs::File,
     io::{BufWriter, Write},
+    path::PathBuf,
     sync::Arc,
     thread::{self, JoinHandle},
     time::{Duration, Instant},
 };
 
-use docker_overhead_bench::utils::{init_config, init_transactions, send_transaction};
+use docker_overhead_bench::utils::{init_config, init_transactions, parse_args, send_transaction};
 
 fn main() {
-    let iterations: u32 = env::args()
-        .nth(1)
-        .expect("Expected iterations argument")
-        .trim()
-        .parse()
-        .expect("Iterations must be a u32");
-
-    let concurrency: u32 = env::args()
-        .nth(2)
-        .expect("Expected concurrency argument")
-        .trim()
-        .parse()
-        .expect("Concurrency must be a u32");
+    let (iterations, concurrency, trial, environment) = parse_args();
 
     let transactions = Arc::new(init_transactions());
     let config = Arc::new(init_config(iterations, concurrency));
@@ -59,13 +47,21 @@ fn main() {
         }
     }
 
-    results.sort_by(|a, b| a.0.cmp(&b.0));
+    if let Some(trial) = trial
+        && let Some(environment) = environment
+    {
+        results.sort_by(|a, b| a.0.cmp(&b.0));
 
-    let mut file = BufWriter::new(File::create("results.csv").expect("Should have created file"));
+        let filename = format!("results_{}_{}_{}.csv", concurrency, trial, environment);
+        let path = PathBuf::from("csv").join(filename);
+        std::fs::create_dir_all("csv").expect("Should have created csv folder");
+        
+        let mut file = BufWriter::new(File::create(path).expect("Should have created file"));
 
-    for (instant, duration) in &results {
-        let timestamp = instant.duration_since(start).as_micros() as u64;
-        let duration = duration.as_micros() as u64;
-        writeln!(file, "{},{}", timestamp, duration).expect("Couldn't write CSV line");
+        for (instant, duration) in &results {
+            let timestamp = instant.duration_since(start).as_micros() as u64;
+            let duration = duration.as_micros() as u64;
+            writeln!(file, "{},{}", timestamp, duration).expect("Couldn't write CSV line");
+        }
     }
 }
