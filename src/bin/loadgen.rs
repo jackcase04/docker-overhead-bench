@@ -25,8 +25,6 @@ fn main() {
         .parse()
         .expect("Concurrency must be a u32");
 
-    println!("Args: {0} {1}", iterations, concurrency);
-
     let transactions = Arc::new(init_transactions());
     let config = Arc::new(init_config(iterations, concurrency));
     let mut results: Vec<(Instant, Duration)> = Vec::new();
@@ -42,7 +40,8 @@ fn main() {
             let trans = transactions[random].clone();
 
             let handle = thread::spawn(move || {
-                let data: Vec<u8> = serde_json::to_vec(&trans).unwrap();
+                let data: Vec<u8> =
+                    serde_json::to_vec(&trans).expect("Should have parsed transaction properly");
 
                 let start = Instant::now();
                 send_transaction(conf, data);
@@ -53,18 +52,20 @@ fn main() {
         }
 
         for handle in handles {
-            let result = handle.join().unwrap();
+            let result = handle
+                .join()
+                .expect("Couldn't join on the associated thread");
             results.push(result);
         }
     }
 
     results.sort_by(|a, b| a.0.cmp(&b.0));
 
-    let mut file = BufWriter::new(File::create("results.csv").unwrap());
+    let mut file = BufWriter::new(File::create("results.csv").expect("Should have created file"));
 
     for (instant, duration) in &results {
-        let timestamp_ns = instant.duration_since(start).as_micros() as u64;
-        let duration_ns = duration.as_micros() as u64;
-        writeln!(file, "{},{}", timestamp_ns, duration_ns).unwrap();
+        let timestamp = instant.duration_since(start).as_micros() as u64;
+        let duration = duration.as_micros() as u64;
+        writeln!(file, "{},{}", timestamp, duration).expect("Couldn't write CSV line");
     }
 }

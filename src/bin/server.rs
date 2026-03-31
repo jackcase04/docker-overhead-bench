@@ -4,10 +4,10 @@ use std::{net::TcpListener, sync::Arc, thread};
 
 fn main() {
     let processor = Arc::new(init_processor());
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    let listener = TcpListener::bind("127.0.0.1:7878").expect("Server should have bound to addr");
 
     for stream in listener.incoming() {
-        let stream = stream.unwrap();
+        let stream = stream.expect("Should have been able to set stream");
         let proc = Arc::clone(&processor);
 
         thread::spawn(move || {

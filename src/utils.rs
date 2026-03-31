@@ -22,7 +22,8 @@ pub fn init_processor() -> Processor {
     };
 
     let contents = fs::read_to_string("data/users.json").expect("Should have read file");
-    let users: Vec<User> = serde_json::from_str(&contents).unwrap();
+    let users: Vec<User> =
+        serde_json::from_str(&contents).expect("Should have parsed users correctly");
 
     let mut i = 1;
     for user in users {
@@ -35,7 +36,8 @@ pub fn init_processor() -> Processor {
 
 pub fn init_transactions() -> Vec<Transaction> {
     let contents = fs::read_to_string("data/transactions.json").expect("Should have read file");
-    let transactions: Vec<Transaction> = serde_json::from_str(&contents).unwrap();
+    let transactions: Vec<Transaction> =
+        serde_json::from_str(&contents).expect("Should have parsed transactions");
 
     transactions
 }
@@ -44,7 +46,7 @@ pub fn init_config(iterations: u32, concurrency: u32) -> Config {
     let config = Config {
         iterations: iterations,
         concurrency: concurrency,
-        address: String::from("127.0.0.1:7878")
+        address: String::from("127.0.0.1:7878"),
     };
 
     config
@@ -57,7 +59,8 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
 
     let _ = stream.read_to_string(&mut data);
 
-    let transaction: Transaction = serde_json::from_str(&data).unwrap();
+    let transaction: Transaction =
+        serde_json::from_str(&data).expect("Should have parsed single transaction");
 
     let approved: RiskLevel = proc.process_transaction(&transaction);
 
@@ -67,9 +70,11 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
 }
 
 pub fn send_transaction(conf: Arc<Config>, data: Vec<u8>) {
-    let mut stream = TcpStream::connect(&conf.address).unwrap();
+    let mut stream = TcpStream::connect(&conf.address).expect("Should have connected to address");
     let _ = stream.write_all(&data);
-    stream.shutdown(std::net::Shutdown::Write).unwrap();
+    stream
+        .shutdown(std::net::Shutdown::Write)
+        .expect("Should have sent shutdown (EOF) to server");
 
     let mut data = String::new();
     let _ = stream.read_to_string(&mut data);
