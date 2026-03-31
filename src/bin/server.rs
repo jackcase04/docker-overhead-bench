@@ -8,8 +8,6 @@ fn main() {
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
-        println!("Connection established!");
-
         let proc = Arc::clone(&processor);
 
         thread::spawn(move || {

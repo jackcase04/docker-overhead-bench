@@ -54,16 +54,13 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
 
     let _ = stream.read_to_string(&mut data);
 
-    println!("Data: {0}", data);
 
     let transaction: Transaction = serde_json::from_str(&data).unwrap();
 
     let approved: RiskLevel = proc.process_transaction(&transaction);
 
-    println!("Users: {0}", proc.users.len());
-    println!("Result: {:?}", approved);
 
-    let data = approved.to_string().into_bytes(); 
+    let data = approved.to_string().into_bytes();
 
     let _ = stream.write_all(&data);
 }
@@ -74,7 +71,7 @@ pub fn send_transaction(conf: Arc<Config>, trans: Transaction) {
     let _ = stream.write_all(&data);
     stream.shutdown(std::net::Shutdown::Write).unwrap();
 
-    let mut data = String::new(); 
+    let mut data = String::new();
 
     let _ = stream.read_to_string(&mut data);
 

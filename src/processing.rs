@@ -16,7 +16,6 @@ impl Processor {
         let user: Option<&User> = self.users.get(&transaction.user_id);
 
         if let Some(user) = user {
-            println!("user: {0}", user.f_name);
 
             let distance = haversine(
                 user.home_lat,
@@ -24,10 +23,8 @@ impl Processor {
                 transaction.merchant_lat,
                 transaction.merchant_long,
             );
-            println!("Distance between transaction and user: {0}", distance);
 
             let cents = transaction.amount_cents;
-            println!("Transaction cents amount: {0}", cents);
 
             // CASE 1: Transaction is below the users limit, and below the soft flag distance.
             if cents <= user.max_trans_cents as u64 && distance < SOFT_DIST {
@@ -54,11 +51,6 @@ impl Processor {
 fn haversine(lat1: f64, long1: f64, lat2: f64, long2: f64) -> f64 {
     // Using haversine formula:
     // https://www.geeksforgeeks.org/dsa/haversine-formula-to-find-distance-between-two-points-on-a-sphere/
-
-    println!(
-        "Lat1: {0} Lon1: {1} Lat2: {2} Lon2: {3}",
-        lat1, long1, lat2, long2
-    );
 
     let d_lat: f64 = (lat2 - lat1) * PI as f64 / 180.0;
     let d_lon: f64 = (long2 - long1) * PI as f64 / 180.0;

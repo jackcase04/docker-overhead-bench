@@ -14,7 +14,6 @@ impl fmt::Display for RiskLevel {
     }
 }
 
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Transaction {
     pub transaction_id: u64,
