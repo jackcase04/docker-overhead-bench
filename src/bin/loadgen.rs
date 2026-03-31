@@ -42,7 +42,7 @@ fn main() {
     results.sort_by(|a, b| a.0.cmp(&b.0));
 
     let mut file = BufWriter::new(File::create("results.csv").unwrap());
-    writeln!(file, "timestamp_ms,duration_ms").unwrap();
+    writeln!(file, "timestamp_us,duration_us").unwrap();
 
     for (instant, duration) in &results {
         let timestamp_ns = instant.duration_since(start).as_micros() as u64;
