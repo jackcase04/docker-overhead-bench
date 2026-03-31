@@ -25,8 +25,10 @@ fn main() {
             let trans = transactions[random].clone();
 
             let handle = thread::spawn(move || {
+                let data: Vec<u8> = serde_json::to_vec(&trans).unwrap();
+                
                 let start = Instant::now();
-                send_transaction(conf, trans);
+                send_transaction(conf, data);
                 (start, start.elapsed())
             });
 

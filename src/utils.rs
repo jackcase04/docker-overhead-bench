@@ -65,15 +65,13 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
     let _ = stream.write_all(&data);
 }
 
-pub fn send_transaction(conf: Arc<Config>, trans: Transaction) {
+pub fn send_transaction(conf: Arc<Config>, data: Vec<u8>) {
     let mut stream = TcpStream::connect(&conf.address).unwrap();
-    let data: Vec<u8> = serde_json::to_vec(&trans).unwrap();
     let _ = stream.write_all(&data);
     stream.shutdown(std::net::Shutdown::Write).unwrap();
 
     let mut data = String::new();
-
     let _ = stream.read_to_string(&mut data);
 
-    println!("Result: {0}", data);
+    // println!("Result: {0}", data);
 }
