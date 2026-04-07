@@ -20,6 +20,8 @@ To generate the plot after running a test, run `python3 scripts/plot.py`.
 
 ### Running the server
 
+If you made changes to the server code, be sure to run `docker built -t fraud-server .`
+
 Natively:
 
 `./target/release/server 127.0.0.1`
