@@ -18,6 +18,26 @@ To generate the plot after running a test, run `python3 scripts/plot.py`.
 
 ---
 
+### Running the server
+
+Natively:
+
+`./target/release/server 127.0.0.1`
+
+Docker bridge mode:
+
+`docker run --rm -d --name server1 -p 7878:7878 fraud-server`
+
+Docker host mode:
+
+`docker run --rm -d --name server2 --network host fraud-server`
+
+Shutting down the containers:
+
+The `-d` flag will run the containers in the background. That means that to disable the containers you will need to run `docker stop`.
+
+Run `docker ps` to find the running containers, then `docker stop <name>` to stop the container.
+
 ### Troubleshooting
 
 You may get issues with the OS limiting the amount of connections at once. If you get this error:

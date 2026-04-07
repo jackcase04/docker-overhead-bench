@@ -16,6 +16,17 @@ use std::{
 
 const LAT: u64 = 5;
 
+pub fn parse_args_server() -> String {
+    let result: String;
+    
+    match env::args().nth(1) {
+        Some(val) => result = val,
+        None => result = String::from("0.0.0.0")
+    }
+
+    result   
+}
+
 pub fn parse_args() -> (u32, u32, Option<u32>, Option<String>) {
     let iterations: u32 = env::args()
         .nth(1)
@@ -104,9 +115,9 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
 pub fn send_transaction(conf: Arc<Config>, data: Vec<u8>) {
     let mut stream = TcpStream::connect(&conf.address).expect("Should have connected to address");
     let _ = stream.write_all(&data);
-    stream
-        .shutdown(std::net::Shutdown::Write)
-        .expect("Should have sent shutdown (EOF) to server");
+    
+    let _ = stream
+        .shutdown(std::net::Shutdown::Write);
 
     let mut data = String::new();
     let _ = stream.read_to_string(&mut data);
