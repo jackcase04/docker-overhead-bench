@@ -9,8 +9,8 @@ for CONCURRENCY in 1 10 50 100 200
 do
   for TRIAL in 1 2 3 4 5
   do
-    echo "Running trial $TRIAL for concurrency $CONCURRENCY, config \"bare metal\":"
-    ./target/release/loadgen 10000 $CONCURRENCY $TRIAL "bare metal"
+    echo "Running trial $TRIAL for concurrency $CONCURRENCY, config \"native\":"
+    ./target/release/loadgen 10000 $CONCURRENCY $TRIAL "native"
   done
 done
 
@@ -24,8 +24,8 @@ for CONCURRENCY in 1 10 50 100 200
 do
   for TRIAL in 1 2 3 4 5
   do
-    echo "Running trial $TRIAL for concurrency $CONCURRENCY, config \"docker host mode\":"
-    ./target/release/loadgen 10000 $CONCURRENCY $TRIAL "docker host"
+    echo "Running trial $TRIAL for concurrency $CONCURRENCY, config \"host\":"
+    ./target/release/loadgen 10000 $CONCURRENCY $TRIAL "host"
   done
 done
 
@@ -39,8 +39,8 @@ for CONCURRENCY in 1 10 50 100 200
 do
   for TRIAL in 1 2 3 4 5
   do
-    echo "Running trial $TRIAL for concurrency $CONCURRENCY, config \"docker bridge mode\":"
-    ./target/release/loadgen 10000 $CONCURRENCY $TRIAL "docker bridge"
+    echo "Running trial $TRIAL for concurrency $CONCURRENCY, config \"bridge\":"
+    ./target/release/loadgen 10000 $CONCURRENCY $TRIAL "bridge"
   done
 done
 

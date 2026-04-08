@@ -3,24 +3,26 @@ use crate::structs::RiskLevel;
 use crate::structs::Transaction;
 use crate::structs::User;
 
-use std::sync::Arc;
 use std::{
     collections::HashMap,
     env, fs,
-    io::{Read, Write},
+    fs::File,
+    io::{BufWriter, Read, Write},
     net::TcpStream,
+    path::PathBuf,
+    sync::Arc,
+    time::{Duration, Instant},
 };
-
 
 pub fn parse_args_server() -> String {
     let result: String;
-    
+
     match env::args().nth(1) {
         Some(val) => result = val,
-        None => result = String::from("0.0.0.0")
+        None => result = String::from("0.0.0.0"),
     }
 
-    result   
+    result
 }
 
 pub fn parse_args() -> (u32, u32, Option<u32>, Option<String>) {
@@ -84,9 +86,13 @@ pub fn init_transactions() -> Vec<Transaction> {
 pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
     let mut data = String::new();
 
-    let mut len_buf: [u8;1] = [0];
-    stream.read_exact(&mut len_buf).expect("Should have read length of transaction");
-    let _ = std::io::Read::by_ref(&mut stream).take(len_buf[0] as u64).read_to_string(&mut data);
+    let mut len_buf: [u8; 1] = [0];
+    stream
+        .read_exact(&mut len_buf)
+        .expect("Should have read length of transaction");
+    let _ = std::io::Read::by_ref(&mut stream)
+        .take(len_buf[0] as u64)
+        .read_to_string(&mut data);
 
     let transaction: Transaction =
         serde_json::from_str(&data).expect("Should have parsed single transaction");
@@ -98,12 +104,35 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
 }
 
 pub fn send_transaction(data: Vec<u8>) {
-    let mut stream = TcpStream::connect("127.0.0.1:7878").expect("Should have connected to address");
-    let len: [u8;1] = [data.len() as u8];
-    
+    let mut stream =
+        TcpStream::connect("127.0.0.1:7878").expect("Should have connected to address");
+    let len: [u8; 1] = [data.len() as u8];
+
     let _ = stream.write_all(&len);
     let _ = stream.write_all(&data);
-    
+
     let mut data = String::new();
     let _ = stream.read_to_string(&mut data);
+}
+
+pub fn write_results(
+    start: Instant,
+    mut results: Vec<(Instant, Duration)>,
+    concurrency: u32,
+    trial: u32,
+    environment: String,
+) {
+    results.sort_by(|a, b| a.0.cmp(&b.0));
+
+    let filename = format!("results_{}_{}_{}.csv", concurrency, trial, environment);
+    let path = PathBuf::from("csv").join(filename);
+    std::fs::create_dir_all("csv").expect("Should have created csv folder");
+
+    let mut file = BufWriter::new(File::create(path).expect("Should have created file"));
+
+    for (instant, duration) in &results {
+        let timestamp = instant.duration_since(start).as_micros() as u64;
+        let duration = duration.as_micros() as u64;
+        writeln!(file, "{},{}", timestamp, duration).expect("Couldn't write CSV line");
+    }
 }

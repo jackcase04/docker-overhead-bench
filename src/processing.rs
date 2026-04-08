@@ -1,4 +1,4 @@
-use std::{collections::HashMap, time::Duration, thread, f32::consts::PI};
+use std::{collections::HashMap, f32::consts::PI, thread, time::Duration};
 
 use crate::structs::RiskLevel;
 use crate::structs::Transaction;
