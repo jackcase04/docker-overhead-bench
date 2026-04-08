@@ -1,4 +1,4 @@
-use std::{collections::HashMap, f32::consts::PI};
+use std::{collections::HashMap, time::Duration, thread, f32::consts::PI};
 
 use crate::structs::RiskLevel;
 use crate::structs::Transaction;
@@ -11,9 +11,14 @@ pub struct Processor {
     pub users: HashMap<u32, User>,
 }
 
+const LAT: u64 = 5;
+
 impl Processor {
     pub fn process_transaction(&self, transaction: &Transaction) -> RiskLevel {
         let user: Option<&User> = self.users.get(&transaction.user_id);
+
+        // LAT ms delay to simulate lookup
+        thread::sleep(Duration::from_millis(LAT));
 
         if let Some(user) = user {
             let distance = haversine(

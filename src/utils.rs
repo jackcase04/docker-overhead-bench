@@ -10,11 +10,8 @@ use std::{
     env, fs,
     io::{Read, Write},
     net::TcpStream,
-    thread,
-    time::Duration,
 };
 
-const LAT: u64 = 5;
 
 pub fn parse_args_server() -> String {
     let result: String;
@@ -96,11 +93,11 @@ pub fn init_config(iterations: u32, concurrency: u32) -> Config {
 }
 
 pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
-    thread::sleep(Duration::from_millis(LAT));
-
     let mut data = String::new();
 
-    let _ = stream.read_to_string(&mut data);
+    let mut len_buf: [u8;1] = [0];
+    stream.read_exact(&mut len_buf).expect("Should have read length of transaction");
+    let _ = std::io::Read::by_ref(&mut stream).take(len_buf[0] as u64).read_to_string(&mut data);
 
     let transaction: Transaction =
         serde_json::from_str(&data).expect("Should have parsed single transaction");
@@ -108,19 +105,16 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
     let approved: RiskLevel = proc.process_transaction(&transaction);
 
     let data = approved.to_string().into_bytes();
-
     let _ = stream.write_all(&data);
 }
 
 pub fn send_transaction(conf: Arc<Config>, data: Vec<u8>) {
     let mut stream = TcpStream::connect(&conf.address).expect("Should have connected to address");
+    let len: [u8;1] = [data.len() as u8];
+    
+    let _ = stream.write_all(&len);
     let _ = stream.write_all(&data);
     
-    let _ = stream
-        .shutdown(std::net::Shutdown::Write);
-
     let mut data = String::new();
     let _ = stream.read_to_string(&mut data);
-
-    // println!("Result: {0}", data);
 }
