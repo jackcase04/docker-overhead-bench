@@ -1,5 +1,4 @@
 use crate::processing::Processor;
-use crate::structs::Config;
 use crate::structs::RiskLevel;
 use crate::structs::Transaction;
 use crate::structs::User;
@@ -82,16 +81,6 @@ pub fn init_transactions() -> Vec<Transaction> {
     transactions
 }
 
-pub fn init_config(iterations: u32, concurrency: u32) -> Config {
-    let config = Config {
-        iterations: iterations,
-        concurrency: concurrency,
-        address: String::from("127.0.0.1:7878"),
-    };
-
-    config
-}
-
 pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
     let mut data = String::new();
 
@@ -108,8 +97,8 @@ pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {
     let _ = stream.write_all(&data);
 }
 
-pub fn send_transaction(conf: Arc<Config>, data: Vec<u8>) {
-    let mut stream = TcpStream::connect(&conf.address).expect("Should have connected to address");
+pub fn send_transaction(data: Vec<u8>) {
+    let mut stream = TcpStream::connect("127.0.0.1:7878").expect("Should have connected to address");
     let len: [u8;1] = [data.len() as u8];
     
     let _ = stream.write_all(&len);
