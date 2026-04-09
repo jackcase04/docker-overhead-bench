@@ -75,12 +75,18 @@ pub fn init_processor() -> Processor {
     processor
 }
 
-pub fn init_transactions() -> Vec<Transaction> {
+pub fn init_transactions() -> Vec<Vec<u8>> {
     let contents = fs::read_to_string("data/transactions.json").expect("Should have read file");
     let transactions: Vec<Transaction> =
         serde_json::from_str(&contents).expect("Should have parsed transactions");
 
-    transactions
+    let mut results: Vec<Vec<u8>> = Vec::new();
+
+    for (i, e) in transactions.iter().enumerate() {
+        results[i] = serde_json::to_vec(e).expect("Should have parsed transaction properly");
+    }
+
+    results
 }
 
 pub fn handle_connection(mut stream: TcpStream, proc: Arc<Processor>) {

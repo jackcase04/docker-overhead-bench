@@ -30,14 +30,9 @@ fn main() {
 
         if threads_sent < iterations {
             let sender = sender.clone();
-
-            let random = rand::thread_rng().gen_range(0..30) as usize;
-            let trans = transactions[random].clone();
+            let data = transactions[rand::thread_rng().gen_range(0..30) as usize].clone();
 
             thread::spawn(move || {
-                let data: Vec<u8> =
-                    serde_json::to_vec(&trans).expect("Should have parsed transaction properly");
-
                 let start = Instant::now();
                 send_transaction(data);
                 sender
