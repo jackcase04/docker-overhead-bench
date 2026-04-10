@@ -82,8 +82,8 @@ pub fn init_transactions() -> Vec<Vec<u8>> {
 
     let mut results: Vec<Vec<u8>> = Vec::new();
 
-    for (i, e) in transactions.iter().enumerate() {
-        results[i] = serde_json::to_vec(e).expect("Should have parsed transaction properly");
+    for trans in transactions {
+        results.push(serde_json::to_vec(&trans).expect("Should have parsed transaction properly"));
     }
 
     results
