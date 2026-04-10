@@ -5,10 +5,7 @@ import numpy as np
 
 path = "csv"
 
-try:
-    os.mkdir("results")
-except:
-    print("")
+os.mkdir("results", exist_ok=True)
 
 # data[config][concurrency][trial]
 data = {}
