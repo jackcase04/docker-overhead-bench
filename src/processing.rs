@@ -1,4 +1,4 @@
-use std::{collections::HashMap, f32::consts::PI, thread, time::Duration};
+use std::{collections::HashMap, f32::consts::PI, fs, thread, time::Duration};
 
 use crate::structs::RiskLevel;
 use crate::structs::Transaction;
@@ -6,16 +6,37 @@ use crate::structs::User;
 
 const SOFT_DIST: f64 = 500.0;
 const HARD_DIST: f64 = 2000.0;
-
-pub struct Processor {
-    pub users: HashMap<u32, User>,
-}
-
 const LAT: u64 = 5;
 
+pub struct Processor {
+    users: HashMap<u32, User>,
+}
+
 impl Processor {
+    pub fn new() -> Self {
+        let mut processor = Processor {
+            users: HashMap::new(),
+        };
+
+        let contents = fs::read_to_string("data/users.json").expect("Should have read file");
+        let users: Vec<User> =
+            serde_json::from_str(&contents).expect("Should have parsed users correctly");
+
+        let mut i = 1;
+        for user in users {
+            processor.users.insert(i, user);
+            i = i + 1;
+        }
+
+        processor
+    }
+
+    pub fn get_user(&self, id: &u32) -> Option<&User> {
+        self.users.get(&id)
+    }
+
     pub fn process_transaction(&self, transaction: &Transaction) -> RiskLevel {
-        let user: Option<&User> = self.users.get(&transaction.user_id);
+        let user: Option<&User> = self.get_user(&transaction.user_id);
 
         // LAT ms delay to simulate lookup
         thread::sleep(Duration::from_millis(LAT));
