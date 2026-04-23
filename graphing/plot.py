@@ -3,80 +3,97 @@ import csv
 import os
 import numpy as np
 
-path = "csv"
+try:
+    os.mkdir("results")
+except:
+    pass
 
-os.mkdir("results", exist_ok=True)
+DEADLINE = 7000.0
 
-# data[config][concurrency][trial]
-data = {}
-for config in ["native", "host", "bridge"]:
-    data[config] = {}
-    for concurrency in [1,10,50,100,200]:
-        data[config][concurrency] = {}
+def parse_data():
+    # data[config][concurrency][trial]
+    data = {}
+    for config in ["native", "host", "bridge"]:
+        data[config] = {}
+        for concurrency in [1,10,50,100,200]:
+            data[config][concurrency] = {}
 
-for file in os.scandir(path):
-    if file.is_file():
-        parts = file.name.split('_')
+    for file in os.scandir("csv"):
+        if file.is_file():
+            y = []
 
-        config = parts[3].split('.')[0]
-        trial = int(parts[2])
-        concurrency = int(parts[1])
-        
-        y = []
+            with open("csv/" + file.name, mode='r') as file:
+                csvfile = csv.reader(file)
+                for lines in csvfile:
+                    y.append(int(lines[1]))
+                    
+            parts = file.name.split('_')
 
-        with open("csv/" + file.name, mode='r') as file:
-            csvfile = csv.reader(file)
-            for lines in csvfile:
-                y.append(int(lines[1]))
-                 
-        parts = file.name.split('_')
-
-        config = parts[3].split('.')[0]
-        trial = int(parts[2])
-        concurrency = int(parts[1])
-        
-        data[config][concurrency][trial] = y 
-
-x = []
-
-for i in range(0, len(y)):
-    x.append(i)
-
-for config in ["native", "host", "bridge"]:
-    means = []
-    stdevs = [] 
+            config = parts[3].split('.')[0]
+            trial = int(parts[2])
+            concurrency = int(parts[1])
+            
+            data[config][concurrency][trial] = y
     
-    for concurrency in [1,10,50,100,200]:
-        trial_means = []
+    return data
 
-        for trial in range(1, 6):
-            trial_means.append(np.mean(data[config][concurrency][trial]))
-        means.append(np.mean(trial_means))
-        stdevs.append(np.std(trial_means))
-    
-    plt.errorbar([1,10,50,100,200], means, yerr=stdevs, label=config, capsize=4, marker='o')
+def generate_mean_lat(data):
+    for config in ["native", "host", "bridge"]:
+        means = []
+        stdevs = [] 
+        
+        for concurrency in [1,10,50,100,200]:
+            trial_means = []
 
-ax = plt.gca()
-ax.set_ylim([0, 20000])
+            for trial in range(1, 6):
+                trial_means.append(np.mean(data[config][concurrency][trial]))
+            
+            means.append(np.mean(trial_means))
+            stdevs.append(np.std(trial_means))
+        
+        plt.errorbar([1,10,50,100,200], means, yerr=stdevs, label=config, capsize=4, marker='o')
 
-plt.xlabel("Concurrency level")
-plt.ylabel("Mean latency (us)")
-plt.legend()
-plt.title("Mean latency vs concurrency")
-plt.show()
+    ax = plt.gca()
+    ax.set_ylim([0, 20000])
 
-# for config in data:
+    plt.xlabel("Concurrency level")
+    plt.ylabel("Mean latency (us)")
+    plt.title("Mean latency vs concurrency")
+    plt.show()
 
-# plt.plot(x, y)
+def generate_deadline_misses(data):
+    for config in ["native", "host", "bridge"]:
+        means = []
+        stdevs = []
+        
+        for concurrency in [1,10,50,100,200]:
+            percentages = []
 
-# plt.xlabel("Request number")
-# plt.ylabel("Latency (us)")
+            for trial in range(1, 6):
+                curr_trial = data[config][concurrency][trial]
+                trial_nums = len(curr_trial)
 
-# plt.title("Latency of transactions: " + file.name)
+                made_deadline = 0
 
-# files = file.name.split('.')[0].split('/')[1]
-# # plt.show()
-# plt.savefig("results/" + files)
-# plt.clf()
+                for time in curr_trial: 
+                    if time < DEADLINE:
+                        made_deadline += 1 
 
-# print(data)
+                percentages.append((1 - (made_deadline / trial_nums)) * 100)
+
+            means.append(np.mean(percentages))
+            stdevs.append(np.std(percentages))
+        
+        plt.errorbar([1,10,50,100,200], means, yerr=stdevs, label=config, capsize=4, marker='o')
+
+    ax = plt.gca()
+    ax.set_ylim([0,100])
+
+    plt.xlabel("Concurrency level")
+    plt.ylabel("Percentage of deadline misses")
+    plt.title("% of deadline misses vs concurrency")
+    plt.legend()
+    plt.show()
+
+data = parse_data()
+generate_deadline_misses(data)
