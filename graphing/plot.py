@@ -62,6 +62,15 @@ def generate_mean_lat(data):
     plt.show()
 
 def generate_deadline_misses(data):
+    fix, ax = plt.subplots()
+    cats = ["1","10","50","100","200"]
+    w, x = 0.4, np.arange(len(cats))
+
+    width_cluster = 0.7
+    width_bar = width_cluster / 3
+
+    index = 0
+
     for config in ["native", "host", "bridge"]:
         means = []
         stdevs = []
@@ -83,16 +92,20 @@ def generate_deadline_misses(data):
 
             means.append(np.mean(percentages))
             stdevs.append(np.std(percentages))
-        
-        plt.errorbar([1,10,50,100,200], means, yerr=stdevs, label=config, capsize=4, marker='o')
 
-    ax = plt.gca()
+        x_positions = x+(width_bar*index)-width_cluster/2
+        ax.bar(x_positions, means, yerr=stdevs, width=width_bar, label=config)
+
+        index += 1
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(cats)
     ax.set_ylim([0,100])
+    ax.set_ylabel('Percent of missed deadlines')
+    ax.set_xlabel('Concurrency level')
+    ax.set_title('% missed deadlines vs concurrency')
+    ax.legend()
 
-    plt.xlabel("Concurrency level")
-    plt.ylabel("Percentage of deadline misses")
-    plt.title("% of deadline misses vs concurrency")
-    plt.legend()
     plt.show()
 
 data = parse_data()
