@@ -59,6 +59,7 @@ def generate_mean_lat(data):
     plt.xlabel("Concurrency level")
     plt.ylabel("Mean latency (us)")
     plt.title("Mean latency vs concurrency")
+    plt.legend()
     plt.show()
 
 def generate_deadline_misses(data):
@@ -108,5 +109,28 @@ def generate_deadline_misses(data):
 
     plt.show()
 
+def generate_percentile(data, percentile):
+    for config in ["native", "host", "bridge"]:
+        percentiles = []
+        
+        for concurrency in [1,10,50,100,200]:
+            trial_percentiles = []
+
+            for trial in range(1, 6):
+                trial_percentiles.append(np.percentile(data[config][concurrency][trial], percentile))
+            
+            percentiles.append(np.mean(trial_percentiles))
+        
+        plt.errorbar([1,10,50,100,200], percentiles, label=config, capsize=4, marker='o')
+
+    ax = plt.gca()
+    ax.set_ylim([0,20000])
+
+    plt.xlabel("Concurrency level")
+    plt.ylabel(f"{percentile}th percentile (us)")
+    plt.title(f"{percentile}th percentile vs concurrency")
+    plt.legend()
+    plt.show()
+
 data = parse_data()
-generate_deadline_misses(data)
+generate_percentile(data, 50)
