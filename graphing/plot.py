@@ -126,7 +126,7 @@ def generate_percentile(data, percentile):
         plt.errorbar(["1","10","50","100","150"], percentiles, label=config, capsize=4, marker='o')
 
     ax = plt.gca()
-    ax.set_ylim([0,20000])
+    # ax.set_ylim([0,20000])
 
     plt.xlabel("Concurrency level")
     plt.ylabel(f"{percentile}th percentile (us)")
@@ -135,4 +135,7 @@ def generate_percentile(data, percentile):
     plt.show()
 
 data = parse_data()
-generate_mean_lat(data)
+# generate_mean_lat(data)
+# generate_deadline_misses(data)
+generate_percentile(data, 99)
+generate_percentile(data, 99.9)
