@@ -15,7 +15,7 @@ def parse_data():
     data = {}
     for config in ["native", "host", "bridge"]:
         data[config] = {}
-        for concurrency in [1,10,50,100,200]:
+        for concurrency in [1,10,50,100,150]:
             data[config][concurrency] = {}
 
     for file in os.scandir("csv"):
@@ -42,16 +42,18 @@ def generate_mean_lat(data):
         means = []
         stdevs = [] 
         
-        for concurrency in [1,10,50,100,200]:
+        for concurrency in [1,10,50,100,150]:
             trial_means = []
 
             for trial in range(1, 6):
-                trial_means.append(np.mean(data[config][concurrency][trial]))
+                curr_mean = np.mean(data[config][concurrency][trial])
+                print(f"{config}: concurrency = {concurrency}, trial = {trial}, mean = {curr_mean}")
+                trial_means.append(curr_mean)
             
             means.append(np.mean(trial_means))
             stdevs.append(np.std(trial_means))
         
-        plt.errorbar([1,10,50,100,200], means, yerr=stdevs, label=config, capsize=4, marker='o')
+        plt.errorbar(["1","10","50","100","150"], means, yerr=stdevs, label=config, capsize=4, marker='o')
 
     ax = plt.gca()
     ax.set_ylim([0, 20000])
@@ -64,7 +66,7 @@ def generate_mean_lat(data):
 
 def generate_deadline_misses(data):
     fix, ax = plt.subplots()
-    cats = ["1","10","50","100","200"]
+    cats = ["1","10","50","100","150"]
     w, x = 0.4, np.arange(len(cats))
 
     width_cluster = 0.7
@@ -76,7 +78,7 @@ def generate_deadline_misses(data):
         means = []
         stdevs = []
         
-        for concurrency in [1,10,50,100,200]:
+        for concurrency in [1,10,50,100,150]:
             percentages = []
 
             for trial in range(1, 6):
@@ -113,7 +115,7 @@ def generate_percentile(data, percentile):
     for config in ["native", "host", "bridge"]:
         percentiles = []
         
-        for concurrency in [1,10,50,100,200]:
+        for concurrency in [1,10,50,100,150]:
             trial_percentiles = []
 
             for trial in range(1, 6):
@@ -121,7 +123,7 @@ def generate_percentile(data, percentile):
             
             percentiles.append(np.mean(trial_percentiles))
         
-        plt.errorbar([1,10,50,100,200], percentiles, label=config, capsize=4, marker='o')
+        plt.errorbar(["1","10","50","100","150"], percentiles, label=config, capsize=4, marker='o')
 
     ax = plt.gca()
     ax.set_ylim([0,20000])
@@ -133,4 +135,4 @@ def generate_percentile(data, percentile):
     plt.show()
 
 data = parse_data()
-generate_percentile(data, 50)
+generate_mean_lat(data)
