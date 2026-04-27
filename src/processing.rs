@@ -6,7 +6,7 @@ use crate::structs::User;
 
 const SOFT_DIST: f64 = 500.0;
 const HARD_DIST: f64 = 2000.0;
-const LAT: u64 = 5;
+const LAT: u64 = 2500;
 
 pub struct Processor {
     users: HashMap<u32, User>,
@@ -38,8 +38,8 @@ impl Processor {
     pub fn process_transaction(&self, transaction: &Transaction) -> RiskLevel {
         let user: Option<&User> = self.get_user(&transaction.user_id);
 
-        // LAT ms delay to simulate lookup
-        thread::sleep(Duration::from_millis(LAT));
+        // LAT us delay to simulate lookup
+        thread::sleep(Duration::from_micros(LAT));
 
         if let Some(user) = user {
             let distance = haversine(
