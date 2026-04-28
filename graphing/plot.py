@@ -8,7 +8,7 @@ try:
 except:
     pass
 
-DEADLINE = 7000.0
+DEADLINE = 7500.0
 
 def parse_data():
     # data[config][concurrency][trial]
