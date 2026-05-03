@@ -134,8 +134,37 @@ def generate_percentile(data, percentile):
     plt.legend()
     plt.show()
 
+def generate_summary_table(data):
+    concurrencies = [1, 10, 50, 100, 150]
+    configs = ["native", "host", "bridge"]
+
+    print(f"Config & Concurrency & Mean & Median & P99 & P99.9 & Missed \\\\")
+
+    for config in configs:
+        for concurrency in concurrencies:
+            all_samples = []
+            missed_pcts = []
+
+            for trial in range(1, 6):
+                samples = data[config][concurrency][trial]
+                all_samples.extend(samples)
+                missed = 0
+                for i in samples:
+                    if i >= DEADLINE:
+                        missed += 1 
+                missed_pcts.append(missed / len(samples) * 100)
+
+            mean = np.mean(all_samples)
+            median = np.median(all_samples)
+            p99 = np.percentile(all_samples, 99)
+            p99_9 = np.percentile(all_samples, 99.9)
+            missed = np.mean(missed_pcts)
+
+            print(f"{config} & {concurrency} & {mean:.1f}ms & {median:.1f}ms & {p99:.1f}ms & {p99_9:.1f}ms & {missed:.1f}\\% \\\\")
+
 data = parse_data()
 # generate_mean_lat(data)
 # generate_deadline_misses(data)
-generate_percentile(data, 99)
-generate_percentile(data, 99.9)
+# generate_percentile(data, 99)
+# generate_percentile(data, 99.9)
+generate_summary_table(data)
